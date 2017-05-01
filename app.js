@@ -12,10 +12,11 @@ const mongo = require('mongodb');
 const mongoose = require('mongoose');
 const routes = require('./routes/index');
 const users = require('./routes/users');
+mongoose.Promise = global.Promise;
 
 //Connecting to MongoDB
 mongoose.connect("mongodb://localhost/loginApp", function() {
-  //console.log("Connected to MongoDB, loginApp DB");
+  console.log("Connected to MongoDB, loginApp DB");
 });
 
 const app = express();
@@ -84,5 +85,5 @@ app.set('port',process.env.PORT||3000);
 
 //listen at Port
 app.listen(app.get('port'),function(){
-  //console.log("Started lisening at Port : "+app.get('port'));
+  console.log("Started lisening at Port : "+app.get('port'));
 });

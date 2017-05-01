@@ -7,6 +7,7 @@ var LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(
   function(username, password, done) {
   User.getUserByUserName(username,function(err,user) {
+    console.log("User : "+user);
     if(err)
     throw err;
     if(!user) {
@@ -17,9 +18,10 @@ passport.use(new LocalStrategy(
       if(err) {
         throw err;
       }
+      console.log('isMatch : '+isMatch);
       if(isMatch) {
 
-        return done(true,user);
+        return done(null,user);
       }
       else {
         //console.log("inside false isMatch");
@@ -33,11 +35,14 @@ passport.use(new LocalStrategy(
 
 
 passport.serializeUser(function(user, done) {
+  console.log("serializing user with user: "+user);
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
+  console.log("deserializing user with id: "+id);
   User.getUserById(id, function(err, user) {
+    console.log("getUserById user : "+user);
     done(err, user);
   });
 });
@@ -95,18 +100,19 @@ routes.post('/register',function(req,res){
 })
 
 //Login
-routes.post('/login',passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),function(req, res) {
+routes.post('/login',passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
+function(req, res) {
    console.log('serving post request');
     res.redirect('/');
   });
 
-/*routes.post('/login',
-  passport.authenticate('local', { successRedirect: '/', successFlash: 'Welcome!',
-                                   failureRedirect: '/users/login',
-                                   failureFlash: true }),function(req,res) {
-                                     console.log("Serving post request");
-                                    res.redirect('/');
+routes.get('/logout',function(req,res) {
+  req.logout();
 
-                                  }); */
+  req.flash("success_msg","you're successfully logged out of the application");
+  res.redirect('/users/login');
+});
+
+
 
 module.exports = routes;

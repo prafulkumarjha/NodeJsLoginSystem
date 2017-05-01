@@ -44,7 +44,7 @@ module.exports.getUserByUserName = function(username,callback) {
 }
 
 module.exports.getUserById = function(id,callback) {
-  User.findOne(id,callback);
+  User.findOne({_id:id},callback);
 
 }
 
