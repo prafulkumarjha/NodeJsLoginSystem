@@ -109,7 +109,7 @@ function(req, res) {
 routes.get('/logout',function(req,res) {
   req.logout();
 
-  req.flash("success_msg","you're successfully logged out of the application");
+  req.flash("success_msg","You have successfully logged out of the application");
   res.redirect('/users/login');
 });
 
